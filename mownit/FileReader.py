@@ -23,7 +23,7 @@ class FileReader:
             for row in reader:
                 x = int(row[0])
                 y = int(row[1])
-                if x >= n or y >= n:
+                if x >= n + 1 or y >= n + 1:
                     raise IndexError('Graph edge out of bound')
                 edge_resistance = float(row[2])
                 if x > y:

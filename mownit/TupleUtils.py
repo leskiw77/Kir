@@ -27,7 +27,7 @@ class TupleUtils:
                 return r
         raise ImportError('No such edge')
 
-    def return_if_e_in_edge(self,e, x, y):
+    def return_if_e_in_edge(self, e, x, y):
         (e_x, e_y, e_val) = e
         if x == e_x and y == e_y:
             return e_val
@@ -35,3 +35,11 @@ class TupleUtils:
             return -e_val
         return 0
 
+    def uniform_direction(self, di_edges):
+        result = []
+        for (x, y, v) in di_edges:
+            if v > 0:
+                result.append((x, y, v))
+            else:
+                result.append((y, x, -v))
+        return result

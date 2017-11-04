@@ -1,11 +1,13 @@
 import numpy as np
+
+from DrawDirectedGraph import DirectedGraphDraw
 from mownit.CycleFinder import CycleFinder
 from mownit.FileReader import FileReader
 from mownit.TupleUtils import TupleUtils
 
 
 def first_kirchow_law():
-    for i in range(0, n-1):
+    for i in range(0, n):
         for (x, y, val) in tuple_utils.get_edges_for_vertex(i):
             pos = tuple_utils.get_index_by_x_y(x, y)
             if x == i:
@@ -16,7 +18,7 @@ def first_kirchow_law():
 
 
 def second_kirchow_law():
-    for i in range(0, edges_number - n + 1):
+    for i in range(0, edges_number - n):
         cycle = cycle_list[i]
         cycle_len = len(cycle)
         for v in range(0, cycle_len):
@@ -37,14 +39,15 @@ def second_kirchow_law():
 
 
 if __name__ == '__main__':
-    n = 8
-    e = (0, 1, 40)
+    n = 15
+    e = (1, 2, 40)
 
     file_reader = FileReader()
-    edges_tuple = file_reader.read_csv_file_graph_edges_as_tuple('file.csv', n)
+    edges_tuple = file_reader.read_csv_file_graph_edges_as_tuple('file3.csv', n)
     cycle_list = CycleFinder().find_cycle(edges_tuple)
     edges_number = len(edges_tuple)
-
+    print(len(cycle_list))
+    print(edges_number)
     A = np.zeros((edges_number, edges_number))
     b = np.zeros(edges_number)
     tuple_utils = TupleUtils(edges_tuple)
@@ -53,4 +56,13 @@ if __name__ == '__main__':
     second_kirchow_law()
 
     x = np.linalg.solve(A, b)
-    print(x)
+
+    result = []
+    for (i, v) in enumerate(x):
+        ex, ey, _ = edges_tuple[i]
+        result.append((ex, ey, v))
+
+    result = tuple_utils.uniform_direction(result)
+    print(result)
+
+    DirectedGraphDraw().draw(result)
